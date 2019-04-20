@@ -1,39 +1,15 @@
-import React from "react";
-import { Container, Card, Image, Button } from "semantic-ui-react";
-import styled from "styled-components";
+import React from "react"
+import { Container, Card, Modal } from "semantic-ui-react"
+import styled from "styled-components"
+import CardDicoms from './CardsDCM'
 import { connect } from 'react-redux'
 import { imgs } from '../actions/index'
+
+import config from '../config/configFile.json'
 
 const BackgroundWrapper = styled.div`
     min-height: 500px;
 `;
-
-
-
-const CardDicoms = props => {
-    const evento = (e) => {
-        const allImages = props.dataIm
-        console.log("AntImage", allImages)
-        const num = e.target.value
-        const selIm = allImages.filter( im => im.id !== num.toString() )
-        console.log(selIm)
-        // se debe pasar selIm al store, como hacerlo?, no se
-        //this.props.img(selIm)
-    }
-    const ImgDcm = props.validate
-    return (
-        <Card>
-            <Card.Content>
-                <Image size='large' src={ URL.createObjectURL(ImgDcm) } />
-            </Card.Content>
-            <Card.Content extra>
-                <Button basic color='red' value={props.numId} onClick={ (e) => evento(e) } >
-                    Reject
-                </Button>
-            </Card.Content>
-        </Card>
-    )
-}
 
 const CardList = props => {
     const cardList = props.list.map((dcmcards, i) => <CardDicoms validate={dcmcards} numId={i} meta={props.meta} dataIm={ props.dataIm } />)
@@ -46,21 +22,37 @@ const CardList = props => {
     )
 }
 
+const rankIm = config.ImageToSend
+
 class ValidateImages extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            imagenes: this.props.imagesStack
+            imagenes: this.props.imagesStack,
+            open: true
         }
+    }
+    close = () => {
+        this.setState({ open: false })
     }
     
     render() {
         const prueba = this.props.imagesStack.map( (im) => im.imshow )
+        const nroIm = prueba.length
         const metadata = this.props.patData
         const imData = this.state.imagenes
         return (
             <BackgroundWrapper>
                 <CardList list={ prueba } meta={ metadata } dataIm={ imData } />
+                { (nroIm <= rankIm[1] && nroIm >= rankIm[0])? 
+                    null: 
+                    <Modal size={'small'} open={this.state.open} onClose={this.close}>
+                        <Modal.Header>Complete Images </Modal.Header>
+                        <Modal.Content>
+                            <p>The rank of image it would be between {rankIm[0].toString()} to {rankIm[1].toString()}</p>
+                        </Modal.Content>
+                    </Modal>
+                }
             </BackgroundWrapper>
         )
     }

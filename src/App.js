@@ -150,9 +150,6 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  //console.log("Dentro del map")
-  //console.log(state.choosen.choosen)
-  //console.log(state.mwl.patselected)
   return {
     enable: state.mwl,
     dataPatient: state.choosen

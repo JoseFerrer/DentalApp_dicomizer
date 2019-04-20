@@ -18,6 +18,13 @@ export const aetitle = (text) => {
     }
 }
 
+export const technician = (text) => {
+    return {
+        type: "TECHNICIAN",
+        payload: text
+    }
+}
+
 export const patselected = () => {
     return {
         type: "PATSELECTED"

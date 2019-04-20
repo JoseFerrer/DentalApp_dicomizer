@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { choose, patselected } from '../actions/index'
 
 const socket = openSocket('http://localhost:22223');
+const lenArr = 7
 
 const results = (data) => {
   var i, paciente;
@@ -13,7 +14,7 @@ const results = (data) => {
 
   for (i = 0; i < data.length; i++) {
     paciente = JSON.stringify(data[i]);
-    var conta = i * 8;
+    var conta = i * lenArr;
     JSON.parse(paciente, (key,value) => {
         if (key === 'patientname') {
             results[conta] = value;
@@ -30,14 +31,11 @@ const results = (data) => {
         if (key === 'studydate') {
             results[conta + 4] = value;
         }
-        if (key === 'sex') {
+        if (key === 'refphysician') {
             results[conta + 5] = value;
         }
         if (key === 'birthdate') {
             results[conta + 6] = value;
-        }
-        if (key === 'address') {
-            results[conta + 7] = value;
         }
     });
   }
@@ -57,10 +55,11 @@ class TableSelectableRow extends Component {
   saveState = e => {
     const patients = this.state.lista
     const num = e.target.value
-    var metadataPat = patients.slice(num*8,num*8 + 8)
-    this.props.dataPatient(metadataPat)
+    var metadataStudy = patients.slice(num*lenArr,num*lenArr + lenArr)
+    metadataStudy.push(this.props.aeTitle)
+    metadataStudy.push(this.props.technicianUser)
+    this.props.metaData(metadataStudy)
     this.props.patSelected()
-    console.log("Entro en saveState")
   }
 
   ShowRows = () => {
@@ -69,8 +68,7 @@ class TableSelectableRow extends Component {
     var FinalTable = []
     for (var i = 0; i <= totpat - 1; i++) {
       const id = [0, 1, 2, 3, 4]
-      const datos = [fila[i*8], fila[i*8 + 2], fila[i*8 + 3], fila[i*8 + 4], <Button inverted value={i} onClick={ (e) => this.saveState(e) }>Enter</Button>]
-      //console.log(datos)
+      const datos = [fila[i*lenArr], fila[i*lenArr + 2], fila[i*lenArr + 3], fila[i*lenArr + 4], <Button inverted value={i} onClick={ (e) => this.saveState(e) }>Enter</Button>]
       const DataRow = datos.map((text, id) => <Table.Cell key={id} >{text}</Table.Cell>)
       FinalTable[i] = <Table.Row key={i} >{ DataRow }</Table.Row>
     } 
@@ -78,27 +76,23 @@ class TableSelectableRow extends Component {
   }
 
   TableGlobal = () => {
-    //return ( <ShowRows lista={this.state.lista} nrocol={this.state.nroPat} /> )
     return ( this.ShowRows() )
   }
 
   enableQuery = () => {
     (this.state.doQuery === true) ? this.demandeJson(this.props.aeTitle) : console.log("EnaleQuery es falso")
-    //this.demandeJson(this.props.aeTitle)
   }
 
   demandeJson = (AETITLE) => {
     this.setState( { doQuery: false })
     var lista
-    const items = 8
+    const items = lenArr
     socket.on('jsonMWL', (jsonObject) => {
-        const jsonString = JSON.stringify(jsonObject);
-        var data = JSON.parse(jsonString);
+        const jsonString = JSON.stringify(jsonObject)
+        var data = JSON.parse(jsonString)
         const res = results(data)
         lista = res
         const nroPat = lista.length/items
-        //console.log("Entro en demandeJson")
-        //console.log(nroPat)
         this.setState({ lista  })
         this.setState({ nroPat })
     });
@@ -109,7 +103,6 @@ class TableSelectableRow extends Component {
     return (
       <div style={{ background: "#151A1D" }}>
       { this.enableQuery() }
-        { console.log(this.props.aeTitle) }
         <Table celled inverted selectable>
           <Table.Header>
             <Table.Row>
@@ -133,12 +126,13 @@ class TableSelectableRow extends Component {
 
 const mapStateToProps = state => {
   return {
-    aeTitle: state.mwl.aetitle
+    aeTitle: state.mwl.aetitle,
+    technicianUser: state.mwl.technician
   }
 }
 
 const mapDispatchToProps = {
-  dataPatient: choose,
+  metaData: choose, //dataPatient
   patSelected: patselected
 }
 

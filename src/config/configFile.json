@@ -1,0 +1,21 @@
+{
+  "ImageToSend": [
+      5,
+      10
+  ],
+  "Technicians": [
+    "Julio Veliz",
+    "Maria Arizmendi",
+    "Manuel Alvarado"
+  ],
+  "ModalityName": [
+    "Panoramico 1",
+    "Tomografo Dental",
+    "Panoramico 2"
+  ],
+  "Aetitle": [
+      "PANORAMDENTAL",
+      "CTBODY",
+      "PANONORM"
+  ]
+}

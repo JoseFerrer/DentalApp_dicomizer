@@ -2,7 +2,8 @@
 const initialState = {
     mwl: false,
     aetitle: "",
-    patselected: false
+    patselected: false,
+    technician: ""
 };
 
 const getworklist = ( state = initialState, action ) => {
@@ -29,6 +30,12 @@ const getworklist = ( state = initialState, action ) => {
             return {
                 ...state,
                 patselected: true
+            }
+        }
+        case "TECHNICIAN": {
+            return {
+                ...state,
+                technician: action.payload
             }
         }
         default: {

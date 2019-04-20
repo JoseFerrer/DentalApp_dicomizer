@@ -4,7 +4,8 @@ import { Button } from "semantic-ui-react";
 import { connect } from 'react-redux'
 import { imgs } from '../../actions/index'
 
-
+import Cropper from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
 
 
 const GridContainer = styled.div`
@@ -72,7 +73,11 @@ class ActionImcontainer extends React.Component {
           isShowed: false,
           labelCrop: false,
           imagePreviewUrl: '',
-          imagesInfos: []
+          imagesInfos: [],
+          crop: {
+            aspect: 1/1
+          },
+          cropImage: ''
         };
     }
 
@@ -94,37 +99,39 @@ class ActionImcontainer extends React.Component {
     }
 
     saveMulImg = () => {
-        let ImUrl = new FileReader()
-        const file = this.state.file
-        var fileImg
-        var imagesInfos = this.state.imagesInfos
-        const stack = imagesInfos.length
-        console.log("tamano de stack", stack)
-        ImUrl.readAsDataURL(file)
-        ImUrl.onload = () => {
-            fileImg = ImUrl.result
-            let imageInfo = {
-                id: stack.toString(),
-                type: file.type,
-                size: Math.round(file.size / 1000) + ' kB',
-                imshow: file,
-                base64: fileImg
-            }
-
-            
-            imagesInfos.push(imageInfo)
-
-
-            this.setState(s => {
-                return {
-                    ...s,
-                    file: '',
-                    isShowed: false,
-                    lastCrop: false,
-                    fileInfo: imagesInfos
+        var file
+        (this.state.labelCrop === true) ? file = this.state.cropImage : file = this.state.file
+        if (file !== '') {
+            let ImUrl = new FileReader()
+            var fileImg
+            var imagesInfos = this.state.imagesInfos
+            const stack = imagesInfos.length
+            ImUrl.readAsDataURL(file)
+            ImUrl.onload = () => {
+                fileImg = ImUrl.result
+                let imageInfo = {
+                    id: stack.toString(),
+                    type: file.type,
+                    size: Math.round(file.size / 1000) + ' kB',
+                    imshow: file,
+                    base64: fileImg
                 }
-            })
-            this.props.img(this.state.fileInfo)
+
+                
+                imagesInfos.push(imageInfo)
+
+
+                this.setState(s => {
+                    return {
+                        ...s,
+                        file: '',
+                        isShowed: false,
+                        labelCrop: false,
+                        fileInfo: imagesInfos
+                    }
+                })
+                this.props.img(this.state.fileInfo)
+            }
         }
         
     }
@@ -135,7 +142,7 @@ class ActionImcontainer extends React.Component {
                 ...s,
                 file: '',
                 isShowed: false,
-                labelCrop: false
+                labelCrop: false,
             }
         })
     }
@@ -149,7 +156,20 @@ class ActionImcontainer extends React.Component {
             }
         })
     }
-    
+
+    _crop(){
+        var file = this.dataURLtoFile(this.refs.cropper.getCroppedCanvas().toDataURL(), 'cropimg.png')
+        this.setState({ cropImage: file })
+    }
+
+    dataURLtoFile = (dataurl, filename) => {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n)
+        }
+        return new File([u8arr], filename, {type:mime})
+    }
 
     render () {
 
@@ -167,15 +187,20 @@ class ActionImcontainer extends React.Component {
                             {   
                                 this.state.isShowed ? 
                                 (<div style={{ display: "block"}}>
-                                    {this.state.labelCrop ?
+                                    {!this.state.labelCrop ?
                                     (
-                                        <img src={this.state.imagePreviewUrl} width="800px" /> 
+                                        <img src={this.state.imagePreviewUrl} max-height="400px" /> 
                                     ):(
-                                        console.log("Aqui vendria el crop") 
+                                        <Cropper
+                                            ref='cropper'
+                                            src={ this.state.imagePreviewUrl }
+                                            style={{height: 400, width: '100%'}}
+                                            // Cropper.js options
+                                            guides={false}
+                                            crop={this._crop.bind(this)} 
+                                        />
                                     )}
-                                    { /*<img src={this.state.imagePreviewUrl} width="800px" />*/ }
                                     <div>
-                                        { /*console.log(this.state.filesToBeSave)*/ }
                                         <Button inverted color='red' onClick={() => this.removeImg()}>
                                             Remove
                                         </Button>
@@ -206,6 +231,7 @@ class ActionImcontainer extends React.Component {
 }
 
 const mapStateToProps = state => {
+    //console.log("Metadata del Store",state.choosen.choosen)
     return {
       patData: state.choosen.choosen,
       imagesStack: state.images.images

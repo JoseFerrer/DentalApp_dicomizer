@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Button, Modal } from "semantic-ui-react";
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { enableMWL, aetitle } from '../actions/index'
+import { enableMWL, aetitle, technician } from '../actions/index'
+
+import config from '../config/configFile.json'
 
 const WrapperDropDown = styled.div`
   padding: 10px;
@@ -34,6 +36,7 @@ class ModalMenu extends Component {
     this.setState({ open: false });
     this.props.enableComps()
     this.props.aeTitle(this.state.aetitleGen)
+    this.props.techUser(this.state.uname)
   };
 
 
@@ -41,15 +44,14 @@ class ModalMenu extends Component {
 
     const { open, closeOnEscape, closeOnDimmerClick } = this.state;
 
+    var dataJson = config.Technicians
+    const arrayValUN = dataJson.map( item => item )
 
-    var usersName = { "tecno1": "Julio Veliz", "tecno2": "Maria Arizmendi", "tecno3": "Manuel Alvarado" }
-    const arrayValUN = Object.entries(usersName).map(item => item[1]);
+    dataJson = config.ModalityName
+    const arrayValMN = dataJson.map( item => item )
 
-    var modalityName = { mdlt1: 'Panoramico 1', mdlt2: 'Tomografo Dental', mdlt3: 'Panoramico 2' };
-    const arrayValMN = Object.entries(modalityName).map(item => item[1]);
-
-    var AETITLE = { aetitle1: 'PANORAMDENTAL', aetitle2: 'CTBODY', aetitle3: 'PANONORM' };
-    const arrayAET = Object.entries(AETITLE).map(item => item[1]);
+    dataJson = config.Aetitle
+    const arrayAET = dataJson.map( item => item )
 
     const handleuserName = e => {
       let userchoose = e.target.value
@@ -113,7 +115,8 @@ class ModalMenu extends Component {
 
 const mapDispatchToProps = {
    enableComps: enableMWL,
-   aeTitle: aetitle
+   aeTitle: aetitle,
+   techUser: technician
 }
 
 export default connect( null, mapDispatchToProps)(ModalMenu);
