@@ -7,11 +7,9 @@ const Port = config.NetConfig.port
 var StrStart = "http://"
 
 
-//const socket = openSocket(StrStart.concat(IP,":",Port));
-
 const patientSend = (props) => {
     console.log("Llego al socket", props)
-    var socket = openSocket(StrStart.concat(IP,":",Port))//('http://localhost:22223')
+    var socket = openSocket(StrStart.concat(IP,":",Port))
     socket.emit('Send Patient data', props)
 }
 

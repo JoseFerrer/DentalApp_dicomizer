@@ -17,7 +17,7 @@ class Send extends React.Component {
 }
 
   sendData = () => {
-    const metadata = this.props.patData
+    const metadata1 = this.props.patData
     const imagePat = this.props.imagesStack
     /* console.log(imagePat.length)
     var lenIm = imagePat.length
@@ -26,9 +26,20 @@ class Send extends React.Component {
     let dataIm
     const imageData = imagePat.map( data => dataIm = { type: data.type, size: data.size, base64: data.base64 } )
     let message = {
-      metadata,
+      metadata: {
+        patientname: metadata1[0],
+        patientid: metadata1[1],
+        accessionnumber: metadata1[2],
+        procedure: metadata1[3],
+        studydate: metadata1[4],
+        refphysician: metadata1[5],
+        birthdate: metadata1[6],
+        aetitle: metadata1[7],
+        technician: metadata1[8]
+      },
       imageData,
     }
+    console.log("Mensaje enviado",message)
     patientSend(message)
   }
 
