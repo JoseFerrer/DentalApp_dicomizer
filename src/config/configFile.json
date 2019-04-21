@@ -17,5 +17,10 @@
       "PANORAMDENTAL",
       "CTBODY",
       "PANONORM"
-  ]
+  ],
+  "NetConfig": {
+    "ip": "localhost",
+    "port": "22223"
+  }
+
 }

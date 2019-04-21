@@ -5,7 +5,14 @@ import openSocket from 'socket.io-client';
 import { connect } from 'react-redux';
 import { choose, patselected } from '../actions/index'
 
-const socket = openSocket('http://localhost:22223');
+import config from '../config/configFile.json'
+
+const IP = config.NetConfig.ip
+const Port = config.NetConfig.port
+var StrStart = "http://"
+
+
+const socket = openSocket(StrStart.concat(IP,":",Port));
 const lenArr = 7
 
 const results = (data) => {
