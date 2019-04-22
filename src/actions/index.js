@@ -5,9 +5,9 @@ export const enableMWL = () => {
     }
 };
 
-export const disableMWL = () => {
+export const gotoTable = () => {
     return {
-        type: "DIS_MWL"
+        type: "GOTO_TABLE"
     }
 };
 

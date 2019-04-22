@@ -1,6 +1,6 @@
 
 const initialState = {
-    mwl: false,
+    mwl: 0,
     aetitle: "",
     patselected: false,
     technician: ""
@@ -11,7 +11,15 @@ const getworklist = ( state = initialState, action ) => {
         case "EN_MWL": {
             return {
                 ...state,
-                mwl: true
+                mwl: 1,
+                patselected: false
+            }
+        }
+        case "GOTO_TABLE": {
+            return {
+                ...state,
+                mwl: 1,
+                patselected: false
             }
         }
         case "GOTOMWL": {

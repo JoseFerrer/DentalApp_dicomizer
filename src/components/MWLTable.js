@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'semantic-ui-react'
-import openSocket from 'socket.io-client';
+import openSocket from 'socket.io-client'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { choose, patselected } from '../actions/index'
 
 import config from '../config/configFile.json'

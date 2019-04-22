@@ -28,84 +28,92 @@ const GridItem = styled.div`
     /* border: 1px solid rgba(0, 0, 0, 0.8); */
 `;
 
+const metaText = {
+    patName: "Patient Name",
+    accNumber: "Accession #",
+    refPhysician: "Referring Physician",
+    patID: "Patient ID",
+    birthDate: "Birthdate"
+}
+
+const valsState = {
+    patName: 'patNamVal',
+    accNumber: 'accNumVal',
+    refPhysician: 'refPhyVal',
+    patID: 'patIDVal',
+    birthDate: 'birthDVal'
+}
+
 class ShowMetadata extends Component {
 
     constructor(props) {
         super(props)
+        const patientData = this.props.data.choosen
         this.state = {
-            patName: "Patient Name",
-            accNumber: "Accession #",
-            refPhysician: "Referring Physician",
-            patID: "Patient ID",
-            birthDate: "Birthdate",
-            patNamVal: "",
-            accNumVal: "",
-            refPhyVal: "",
-            patIDVal: "",
-            birthDVal: ""
+            patNamVal: patientData[0],
+            accNumVal: patientData[2],
+            refPhyVal: patientData[5],
+            patIDVal: patientData[1],
+            birthDVal: patientData[6]
         };
     }
 
     essay = (e) => {
-        var dataChange = this.props.data.choosen
-        switch(e.target.name){
-            case this.state.patName:
-                this.setState({ patNamVal: e.target.value })
-                //dataChange[0] = e.target.value
-                //this.props.dataPatient(dataChange)
+        this.setState({ [e.target.name]: e.target.value })
+        var metaD = this.props.data.choosen
+        switch (e.target.name) {
+            case valsState.patName:
+                metaD[0] = e.target.value
                 break
-            case this.state.accNumber:
-                dataChange[2] = e.target.value
-                //this.props.dataPatient(dataChange)
+            case valsState.accNumber:
+                metaD[2] = e.target.value
                 break
-            case this.state.refPhysician:
-                dataChange[5] = e.target.value
-                //this.props.dataPatient(dataChange)
+            case valsState.refPhysician:
+                metaD[5] = e.target.value
                 break
-            case this.state.patID:
-                dataChange[1] = e.target.value
-                //this.props.dataPatient(dataChange)
+            case valsState.patID:
+                metaD[1] = e.target.value
                 break
-            case this.state.birthDate:
-                dataChange[6] = e.target.value
-                //this.props.dataPatient(dataChange)
+            case valsState.birthDate:
+                metaD[6] = e.target.value
                 break
-            default:
-                console.log("entro en default")
         }
-        //console.log("New State", this.state)
+        console.log("que salga porfa", metaD)
+        this.props.dataPatient(metaD)
     }
-    // falta colocar this.setState({data: this.props.data.choosen})
     render() {
         const patientData = this.props.data.choosen
-        console.log("State", this.state)
-        const InputInverted = (props) => (
-            <Segment inverted>
-              <Input size='medium' inverted defaultValue={ props.name } name={ props.value } onChange={ (e) => this.essay(e) } />
-            </Segment>
-          )
         return (
             <GridContainer>
-                <GridItem>{this.state.patName}
-                </GridItem>
+                <GridItem>{metaText.patName}</GridItem>
                 <GridItem>
-                    <InputInverted value={this.state.patName} name={ patientData[0] } />
+                    <Segment inverted>
+                        <Input size='medium' inverted defaultValue={ patientData[0] } name={ valsState.patName } onChange={ (e) => this.essay(e) } />
+                    </Segment>
                 </GridItem>
-                <GridItem>{ this.state.accNumber }</GridItem>
+                <GridItem>{ metaText.accNumber }</GridItem>
                 <GridItem>
-                    <InputInverted value={ this.state.accNumber } name={ patientData[2] } />
+                    <Segment inverted>
+                        <Input size='medium' inverted defaultValue={ patientData[2] } name={ valsState.accNumber } onChange={ (e) => this.essay(e) } />
+                    </Segment>
                 </GridItem>
-                <GridItem>{ this.state.refPhysician }</GridItem>
+                <GridItem>{ metaText.refPhysician }</GridItem>
                 <GridItem>
-                    <InputInverted value={ this.state.refPhysician } name={ patientData[5] } />
+                    <Segment inverted>
+                        <Input size='medium' inverted defaultValue={ patientData[5] } name={ valsState.refPhysician } onChange={ (e) => this.essay(e) } />
+                    </Segment>
                 </GridItem>
-                <GridItem>{ this.state.patID }</GridItem>
+                <GridItem>{ metaText.patID }</GridItem>
                 <GridItem>
-                    <InputInverted value={ this.state.patID } name={ patientData[1] } />
+                    <Segment inverted>
+                        <Input size='medium' inverted defaultValue={ patientData[1] } name={ valsState.patID } onChange={ (e) => this.essay(e) } />
+                    </Segment>
                 </GridItem>
-                <GridItem>{ this.state.birthDate }</GridItem>
+                <GridItem>{ metaText.birthDate }</GridItem>
                 <GridItem>
-                    <InputInverted value={ this.state.birthDate } name={ patientData[6] } />
+                    <Segment inverted>
+                        <Input size='medium' inverted defaultValue={ patientData[6] } name={ valsState.birthDate } onChange={ (e) => this.essay(e) } />
+                    </Segment>
                 </GridItem>
             </GridContainer>
         )

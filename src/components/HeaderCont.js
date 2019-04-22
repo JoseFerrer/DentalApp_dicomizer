@@ -1,6 +1,9 @@
-import React from "react";
-//import PropTypes from "prop-types";
-import styled from "styled-components";
+import React, { Component } from "react"
+import styled from "styled-components"
+import { Button } from "semantic-ui-react"
+
+import { connect } from 'react-redux'
+import { gotoTable } from '../actions/index'
 
 const EqualDivider = styled.div`
   display: flex;
@@ -54,8 +57,12 @@ padding-top:35px;
 font-size: 25px;
 `;
 
-const HeaderCont = props => {
-  return (
+class HeaderCont extends Component {
+  gotoTable = () => {
+    this.props.enableTable()
+  }
+  render(){
+    return (
       <div>
         <EqualDivider>
             <Child1></Child1>
@@ -67,20 +74,27 @@ const HeaderCont = props => {
             <Child3>
                 <WrapConfig>
                     <WrapTextConf>
-                      Go To MWL
+                      <Button basic inverted color='blue' onClick={ () => this.gotoTable() } >
+                        Go to MWL
+                      </Button>
                     </WrapTextConf>
                 </WrapConfig>
             </Child3>
         </EqualDivider>
-    </div>
-  );
-};
+      </div>
+    )
+  }
+}
 
-//Button.propTypes = {
-//  children: PropTypes.string,
-//  normalColor: PropTypes.string,
-//  activeColor: PropTypes.string,
-//  onClick: PropTypes.func.isRequired
-//};
+const mapDispatchToProps = {
+  enableTable: gotoTable
+}
 
-export default HeaderCont;
+const mapStateToProps = state => {
+  return {
+    enable: state.mwl
+  }
+}
+  
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderCont)

@@ -4,25 +4,24 @@ import { connect } from 'react-redux';
 
 import { patientSend } from '../../socketCom'
 
-//import config from '../../config/configFile.json'
+import config from '../../config/configFile.json'
 
-//const rankIm = config.ImageToSend
+import { gotoTable } from '../../actions/index'
+
+const rankIm = config.ImageToSend
 
 class Send extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        enButton: false
+        enButton: false,
+        nroIm: this.props.imagesStack.length
     }
 }
-
+  
   sendData = () => {
     const metadata1 = this.props.patData
     const imagePat = this.props.imagesStack
-    /* console.log(imagePat.length)
-    var lenIm = imagePat.length
-    console.log(lenIm)
-    ( lenIm <= rankIm[1] && lenIm >= rankIm[0] )? this.setState({ enButton: true }):this.setState({ enButton: false }) */
     let dataIm
     const imageData = imagePat.map( data => dataIm = { type: data.type, size: data.size, base64: data.base64 } )
     let message = {
@@ -39,16 +38,27 @@ class Send extends React.Component {
       },
       imageData,
     }
-    console.log("Mensaje enviado",message)
     patientSend(message)
+    this.props.enableTable()
+  }
+
+  setButton = () => {
+    const lenIm = this.state.nroIm
+    var out
+    if (lenIm >= rankIm[0] && lenIm <= rankIm[1]) {
+      out = false
+    } else {
+      out = true
+    }
+    return out
   }
 
   render() {
     const { isActive } = this.props;
     if (isActive === false) return null;
-
+    
     return (
-      <Button inverted color='red' disabled={this.state.enButton} onClick={ () => this.sendData() } >
+      <Button inverted color='red' disabled={this.setButton()} onClick={ () => this.sendData() } >
         Send PACS
       </Button>
     );
@@ -63,4 +73,8 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect( mapStateToProps, null)( Send )
+const mapDispatchToProps = {
+  enableTable: gotoTable
+}
+
+export default connect( mapStateToProps, mapDispatchToProps)( Send )

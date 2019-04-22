@@ -101,15 +101,6 @@ class App extends Component {
     };
 }
 
-  /* handleComodin = () => {
-    var fs = require('fs')
-    fs.readFile('Users/joseferrer/Downloads/input.jpg', function(err, data) {
-      console.log("Despliega imagen")
-      console.log(data)
-    })
-  } */
-
-
   render() {
     return (
       <div>
@@ -118,13 +109,41 @@ class App extends Component {
           <HeaderCont />
         </WrapHeader>
         <WrapSection>
-          { this.props.enable.mwl === true ? (
+          { console.log("Habilitar tabla",this.props.enable.mwl) }
+          { console.log("Habilitar steepers",this.props.enable.patselected) }
+          { /*() => {
+            switch(this.props.enable.mwl){
+              case 0:
+                return null
+              case 1:
+              if (!this.props.enable.patselected){
+                return (
+                <TableContainer>
+                  <TextColor>
+                    Modality WorkList
+                  </TextColor>
+                  <TableSelectableRow />
+                </TableContainer>
+              )}
+              case 2:
+              if (!this.props.enable.patselected){
+                return null
+              }
+              return (
+                <StepList>
+                  <Step component={Metadata} />
+                  <Step component={LoadImages} />
+                  <Step component={Send2PACS} />
+                </StepList>
+              )
+          } }*/}
+
+          { this.props.enable.mwl === 1 ? (
               (!this.props.enable.patselected) ? (
                 <TableContainer>
                   <TextColor>
                     Modality WorkList
                   </TextColor>
-                  
                   <TableSelectableRow />
                 </TableContainer>
               ):(
@@ -136,7 +155,22 @@ class App extends Component {
               )
             
           ): (
-            console.log("Esto es null")
+            this.props.enable.mwl === 2 ? (
+              (!this.props.enable.patselected) ? (
+                <TableContainer>
+                  <TextColor>
+                    Modality WorkList
+                  </TextColor>
+                  <TableSelectableRow />
+                </TableContainer>
+              ):(
+                <StepList>
+                  <Step component={Metadata} />
+                  <Step component={LoadImages} />
+                  <Step component={Send2PACS} />
+                </StepList>
+              )
+            ):(null)
           ) }
           
         </WrapSection>

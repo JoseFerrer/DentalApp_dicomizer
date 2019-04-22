@@ -8,7 +8,6 @@ var StrStart = "http://"
 
 
 const patientSend = (props) => {
-    console.log("Llego al socket", props)
     var socket = openSocket(StrStart.concat(IP,":",Port))
     socket.emit('Send Patient data', props)
 }
