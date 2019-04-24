@@ -93,7 +93,6 @@ class ModalMenu extends Component {
                 <SelectOpt value="0">Choose a Modality Name</SelectOpt>
                 <SelectOpt value="1">{ arrayValMN[0] }</SelectOpt>
                 <SelectOpt value="2">{ arrayValMN[1] }</SelectOpt>
-                <SelectOpt value="3">{ arrayValMN[2] }</SelectOpt>
               </DropDwn>
             </WrapperDropDown>
           </Modal.Content>
