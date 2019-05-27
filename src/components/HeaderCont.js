@@ -47,14 +47,13 @@ const WrapConfig = styled.div`
 
 const WrapMain = styled.div`
 color: white;
-padding-top:25px;
-font-size: 35px;
+padding-top:20px;
+font-size: 40px;
 `;
 
 const WrapTextConf = styled.div`
 color: white;
-padding-top:35px;
-font-size: 25px;
+padding-top:10px;
 `;
 
 class HeaderCont extends Component {

@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 
 const WrapHeader = styled.div`
   position: absolute;
-  height: 100px;
+  height: 80px;
   top: 0px;
   left: 0px;
   right: 0px;
@@ -25,9 +25,9 @@ const WrapHeader = styled.div`
 `;
 const WrapSection = styled.div`
   position: absolute;
-  top: 100px;
+  top: 80px;
   min-height: 500px;
-  bottom: 60px;
+  bottom: 40px;
   left: 0px;
   right: 0px;
   overflow: auto;
@@ -39,7 +39,7 @@ const WrapFooter = styled.div`
   width: 100%;
   background-color: #0F1214;
   color: #6FBCE2;
-  height: 60px;
+  height: 40px;
   bottom: 0px;
   left: 0px;
   right: 0px;
@@ -53,7 +53,6 @@ const WrapFooter = styled.div`
 const TextColor = styled.div`
   width: 97%;
   overflow: hidden;
-  /*background-color: blue;*/
   color: white;
   margin: 10px 10px;
   padding: 10px 10px;

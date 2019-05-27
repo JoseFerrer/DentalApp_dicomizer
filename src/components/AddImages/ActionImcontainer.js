@@ -10,12 +10,11 @@ import 'cropperjs/dist/cropper.css'
 
 const GridContainer = styled.div`
     display: grid;
-    grid-template-columns: 10% 70% 10%;
+    grid-template-columns: 15% 70% 15%;
     grid-row: 27%;
     grid-row-gap: 5px;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px;
-    /*background-color: blue;*/
     min-height: 350px;
 `;
 
@@ -29,7 +28,6 @@ const GridItem = styled.div`
     margin: 10% 0;
     align-items: center;
     color: white;
-    /* border: 1px solid rgba(0, 0, 0, 0.8); */
 `;
 
 const FileUpload = styled.div`
@@ -63,6 +61,11 @@ const FileUploadInput = styled.input`
 const WrapConteiner = styled.div`
     min-height: 500px;
 `;
+
+const WrapImage = styled.img`
+    max-height: 550px;
+
+`
 
 class ActionImcontainer extends React.Component {
 
@@ -189,7 +192,9 @@ class ActionImcontainer extends React.Component {
                                 (<div style={{ display: "block"}}>
                                     {!this.state.labelCrop ?
                                     (
-                                        <img src={this.state.imagePreviewUrl} max-height="400px" /> 
+                                        <WrapImage 
+                                            src={this.state.imagePreviewUrl} 
+                                            alt="imageup" />
                                     ):(
                                         <Cropper
                                             ref='cropper'
@@ -231,7 +236,6 @@ class ActionImcontainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-    //console.log("Metadata del Store",state.choosen.choosen)
     return {
       patData: state.choosen.choosen,
       imagesStack: state.images.images
