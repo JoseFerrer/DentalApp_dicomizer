@@ -94,6 +94,7 @@ class TableSelectableRow extends Component {
     this.setState( { doQuery: false })
     var lista
     const items = lenArr
+    console.log("Prueba", AETITLE)
     socket.on('jsonMWL', (jsonObject) => {
         const jsonString = JSON.stringify(jsonObject)
         var data = JSON.parse(jsonString)
