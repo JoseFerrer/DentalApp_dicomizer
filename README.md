@@ -1,68 +1,158 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Deploying DentalApp Dicomizer
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+# Introduction
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Now, I'll show you how I implement a DentalApp Dicomizer.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+This repository contains the files related to the Front-End Microservice and it would be complemented with [Back-End Microservice](https://github.com/palefo/backend_emetac). The `master` branch contains front-end application source code.
 
-### `npm test`
+Moreover, this document contains a tutorial about prerequisites and the installation.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Tutorial
 
-### `npm run build`
+## Prerequisites
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. React JS is a JavaScript library, so it needs nodejs installed. An adequate version of [`Node.js`](https://nodejs.org/) would be installed. Here's the adequate version I use:
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+    ```sh
+    $ curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ ```sh
+    $ sudo apt-get install -y nodejs
+    ```
 
-### `npm run eject`
+2. An adequate version of  [`yarn`](https://yarnpkg.com/en/) is installed. Here's the adequate version I use:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    ```sh
+    $ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    ```
+    ```sh
+    $ echo "deb https://dl.yarnpkg.com/debian/ stable main" | 
+   sudo tee /etc/apt/sources.list.d/yarn.list
+    ```
+    ```sh
+    $ sudo apt-get update && sudo apt-get install yarn
+    ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. An adequate version of [`create-react-app`](https://github.com/facebookincubator/create-react-app) is installed. Here's the adequate version I use:
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    ```sh
+    $ create-react-app --version
+    1.3.1
+    ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    In the case of `create-react-app`, you can either install it globally (i.e. `$ npm install -g create-react-app`) or install it locally (i.e. `$ npm install create-react-app`). If you choose the latter, you will have to specify its path whenever you invoke it (e.g. `path/to/node_modules/.bin/create-react-app`).
 
-## Learn More
+4. (**Optional**) An adequate version of [`sed`](http://www.gnu.org/software/sed/) is installed. Here's the adequate version I use:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```sh
+   $ sed --version
+   sed (GNU sed) 4.4
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+5. A [GitHub](https://www.github.com) account. :octocat:
 
-### Code Splitting
+6. A command-line Git client [setup according to GitHub](https://help.github.com/articles/set-up-git/).
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Procedure
 
-### Analyzing the Bundle Size
+1. **Create an *empty* repository on GitHub.** (2 minutes)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+    * For this tutorial, I'll create a repository named `react-gh-pages`.
+    * By *empty*, I mean *without* a `README.md` file, a `.gitignore` file, a `LICENSE` file, or any other files.
 
-### Making a Progressive Web App
+2. **Create a new React app on your computer.** (5 minutes)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+    ```sh
+    $ create-react-app react-gh-pages
+    ```
+    
+    * This is the app you will deploy to GitHub Pages in step 7.
+    * I opted to give the app the same name as my GitHub repository (i.e. `react-gh-pages`). However, you can name them differently from one another (e.g. you can name your app `app-123` and your GitHub Repository `repo-456`).
+    * This will create a new folder named `react-gh-pages` (or whatever you named your app) on your computer.
 
-### Advanced Configuration
+3. **Install the `gh-pages` package as a "dev-dependency" of the app.** (1 minute)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+    ```
+    $ cd react-gh-pages
+    $ npm install gh-pages --save-dev
+    ```
+    
+    * The commands shown in the following steps can all be issued from within the app's folder.
 
-### Deployment
+4. **Add some properties to the app's `package.json` file.** (3 minutes)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+    * At the top level, add a `homepage` property. Define its value to be the string `http://{username}.github.io/{repo-name}`, where `{username}` is your GitHub username, and `{repo-name}` is the name of the GitHub repository you created in step 1. Since my GitHub username is `gitname` and the name of my GitHub repository is `react-gh-pages`, I added the following property:
+    
+    ```js
+    //...
+    "homepage": "http://gitname.github.io/react-gh-pages"
+    ```
+    
+    * In the existing `scripts` property, add a `predeploy` property and a `deploy` property, each having the values shown below:
 
-### `npm run build` fails to minify
+    ```js
+    "scripts": {
+      //...
+      "predeploy": "npm run build",
+      "deploy": "gh-pages -d build"
+    }
+    ```
+    
+    * **Shortcut:** Instead of adding those properties using a text editor; if I have `sed` installed on my system, I can add the properties by issuing the following shell commands:
+    
+    ```sh
+    $ sed -i '5i\  "homepage": "http://gitname.github.io/react-gh-pages",' ./package.json
+    $ sed -i '15i\    "predeploy": "npm run build",' ./package.json
+    $ sed -i '16i\    "deploy": "gh-pages -d build",' ./package.json
+    ```
+    
+5. **Create a git repository in the app's folder.** (1 minute)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    ```
+    $ git init
+    Initialized empty Git repository in C:/path/to/react-gh-pages/.git/
+    ```
+
+6. **Add the GitHub repository as a "remote" in your local git repository.** (1 minute)
+
+    ```
+    $ git remote add origin https://github.com/gitname/react-gh-pages.git
+    ```
+    
+    * This will make it so the `gh-pages` package knows where you want it to deploy your app in step 7.
+    * It will also make it so git knows where you want it to push your source code (i.e. the commits on your `master` branch) in step 8.
+
+7. **Generate a *production build* of your app, and deploy it to GitHub Pages.** (2 minutes)
+
+    ```
+    $ npm run deploy
+    ```
+    
+    * That's it! Your app is now accessible at the URL you specified in step 4.
+    * In my case, my app is now accessible at: https://gitname.github.io/react-gh-pages/
+    * I recommend exploring the GitHub repository at this point. When I explored it, I noticed that, although a `master` branch did not exist, a `gh-pages` branch did exist. I noticed the latter contained the *built* app code, as opposed to the app's source code.
+
+8. **Optionally, commit your source code to the "master" branch and push your commit to GitHub.** (1 minute)
+
+    ```
+    $ git add .
+    $ git commit -m "Create a React app and publish it to GitHub Pages"
+    $ git push origin master
+    ```
+
+    * I recommend exploring the GitHub repository once again at this point. When I did that, I noticed that a `master` branch now existed, and it contained the app's source code.
+    * So, the `master` branch held the source code, and the `gh-pages` branch held the *built* app code.
+
+# References
+
+1. [Facebook's tutorial on deploying a React app to GitHub Pages](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#github-pages)
+
+# Notes
+
+* I created this React app using [`create-react-app`](https://github.com/facebookincubator/create-react-app). By default, apps created using `create-react-app` have a README.md file that looks like [this](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md). Indeed, the README.md file you're now reading originally looked like that. I have since changed it to look the way it looks today.
+* Special thanks to GitHub, Inc., for providing us with the GitHub Pages hosting functionality at no extra charge.
+* And now, time to turn the default `create-react-app` app into something unique!
