@@ -20,7 +20,7 @@ Moreover, this document contains a tutorial about prerequisites and the installa
     $ curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
     ```
 
- ```sh
+    ```sh
     $ sudo apt-get install -y nodejs
     ```
 
