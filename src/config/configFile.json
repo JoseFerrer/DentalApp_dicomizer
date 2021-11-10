@@ -19,7 +19,7 @@
       "PANONORM"
   ],
   "NetConfig": {
-    "ip": "localhost",
+    "ip": "149.56.44.36",
     "port": "22223"
   }
 
